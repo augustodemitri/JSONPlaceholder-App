@@ -1,6 +1,9 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    kotlin("kapt")
+    id("com.google.dagger.hilt.android")
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
 
 android {
@@ -59,6 +62,34 @@ dependencies {
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
+    // Retrofit
+    implementation("com.squareup.retrofit2:retrofit:2.11.0")
+    // Gson
+    implementation("com.squareup.retrofit2:converter-gson:2.11.0")
+    // Google maps
+    implementation("com.google.maps.android:android-maps-utils:3.8.2")
+    implementation("com.google.maps.android:maps-utils-ktx:5.1.1")
+    // Hilt
+    implementation("com.google.dagger:hilt-android:2.48")
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
+    kapt("com.google.dagger:hilt-android-compiler:2.48")
+    // Navigation
+    implementation("androidx.navigation:navigation-compose:2.7.7")
+    // Coroutines
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.0")
+    // Coil
+    implementation("io.coil-kt:coil-compose:2.7.0")
+    // Google maps
+    implementation("com.google.android.gms:play-services-maps:18.0.2")
+    implementation("com.google.android.gms:play-services-location:21.3.0")
+    // Google maps for compose
+    implementation("com.google.maps.android:maps-compose:2.8.0")
+    // KTX for the Maps SDK for Android
+    implementation("com.google.maps.android:maps-ktx:3.2.1")
+    // KTX for the Maps SDK for Android Utility Library
+    implementation("com.google.maps.android:maps-utils-ktx:5.1.1")
+
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.2.1")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
