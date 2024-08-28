@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">JSONPlaceholder App</string>
+    <string name="try_again">"Let’s try again!"</string>
+    <string name="error_message">"Something went wrong."</string>
+    <string name="comments_section_title">"Comments"</string>
+    <string name="search_bar_hint">"Search..."</string>
 </resources>
