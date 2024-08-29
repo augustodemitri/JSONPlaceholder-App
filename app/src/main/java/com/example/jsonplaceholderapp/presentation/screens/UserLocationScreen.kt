@@ -107,8 +107,7 @@ fun MapScreen(
                         ) {
                             Marker(
                                 state = MarkerState(position = userLocation),
-                                title = "${user.firstName} ${user.lastName}",
-                                snippet = "Marker for user"
+                                title = "${user.firstName} ${user.lastName}"
                             )
                         }
                     }

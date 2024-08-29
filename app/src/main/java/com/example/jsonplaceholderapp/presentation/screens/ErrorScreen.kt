@@ -22,6 +22,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.ui.res.stringResource
 import com.example.jsonplaceholderapp.R
 
 @Composable
@@ -44,13 +45,13 @@ fun ErrorScreen(onContinueClick: () -> Unit) {
             )
             Spacer(modifier = Modifier.height(16.dp))
             Text(
-                text = "Something went wrong.",
+                text = stringResource(id = R.string.error_message),
                 color = Color.Black,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold
             )
             Text(
-                text = "Let’s try again!",
+                text = stringResource(id = R.string.try_again),
                 color = Color.Black,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold
