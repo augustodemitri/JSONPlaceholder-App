@@ -1,6 +1,7 @@
 package com.example.jsonplaceholderapp.presentation.screens
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -23,6 +24,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -30,6 +32,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -63,15 +66,16 @@ fun NewsScreen(
             .padding(paddingValues)
     ) {
         Image(
-            painter = painterResource(id = R.drawable.conexa),
+            painter = painterResource(id = R.drawable.app_screen_icon),
             contentDescription = "App Icon",
+            alpha = 0.4f,
             modifier = Modifier
                 .size(
-                    width = 150.dp,
+                    width = 180.dp,
                     height = 60.dp
                 )
                 .align(Alignment.Start)
-                .padding(start = 16.dp, top = 16.dp)
+                .padding(start = 4.dp, top = 4.dp)
         )
 
         SearchBarComponent(query, newsViewModel)
@@ -110,7 +114,7 @@ private fun SearchBarComponent(
         },
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp),
+            .padding(top = 4.dp, start = 16.dp, end = 16.dp, bottom = 16.dp),
         placeholder = { Text(stringResource(id = R.string.search_bar_hint)) },
         singleLine = true
     )
