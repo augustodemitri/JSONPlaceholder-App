@@ -1,7 +1,6 @@
 package com.example.jsonplaceholderapp.presentation.screens
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -24,7 +23,6 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,7 +30,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -71,14 +68,15 @@ fun NewsScreen(
             alpha = 0.4f,
             modifier = Modifier
                 .size(
-                    width = 180.dp,
-                    height = 60.dp
+                    width = 180.dp, height = 60.dp
                 )
                 .align(Alignment.Start)
                 .padding(start = 4.dp, top = 4.dp)
         )
 
-        SearchBarComponent(query, newsViewModel)
+        SearchBarComponent(query, onQueryChanged = { typedQuery ->
+            newsViewModel.updateQuery(typedQuery)
+        })
 
         when (newsListState) {
             is NewsUiState.Loading -> {
@@ -87,9 +85,9 @@ fun NewsScreen(
 
             is NewsUiState.ShowNewsList -> {
                 val articleWithAuthors = (newsListState as NewsUiState.ShowNewsList).data
-                NewsList(articlesWithAuthors = articleWithAuthors) { newsId ->
+                NewsList(articlesWithAuthors = articleWithAuthors, onPostClicked = { newsId ->
                     onNavigateToNewsDetails(newsId)
-                }
+                })
             }
 
             is NewsUiState.Error -> {
@@ -102,7 +100,7 @@ fun NewsScreen(
 @Composable
 private fun SearchBarComponent(
     query: String,
-    newsViewModel: NewsViewModel
+    onQueryChanged: (String) -> Unit
 ) {
     OutlinedTextField(
         value = query,
@@ -110,7 +108,7 @@ private fun SearchBarComponent(
             Icon(imageVector = Icons.Default.Search, contentDescription = null)
         },
         onValueChange = { typedQuery ->
-            newsViewModel.updateQuery(typedQuery)
+            onQueryChanged(typedQuery)
         },
         modifier = Modifier
             .fillMaxWidth()
@@ -123,7 +121,7 @@ private fun SearchBarComponent(
 @Composable
 fun NewsList(
     articlesWithAuthors: List<ArticleWithAuthor>,
-    onClick: (newsId: Int) -> Unit
+    onPostClicked: (newsId: Int) -> Unit
 ) {
     LazyColumn(
         state = rememberLazyListState(),
@@ -132,7 +130,7 @@ fun NewsList(
         horizontalAlignment = Alignment.Start
     ) {
         items(articlesWithAuthors) { article ->
-            NewsCard(article, onClick = onClick)
+            NewsCard(article, onClick = onPostClicked)
         }
     }
 }
@@ -176,7 +174,10 @@ fun NewsCard(
                 Row(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    UserAvatarComponent(initials = articleWithAuthor.author?.initials, modifier = Modifier.size(26.dp))
+                    UserAvatarComponent(
+                        initials = articleWithAuthor.author?.initials,
+                        modifier = Modifier.size(26.dp)
+                    )
 
                     Spacer(modifier = Modifier.width(4.dp))
 
