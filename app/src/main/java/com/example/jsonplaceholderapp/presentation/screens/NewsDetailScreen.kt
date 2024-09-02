@@ -105,9 +105,7 @@ fun NewsDetailsScreen(
         }
 
         is NewsDetailsUiState.Error -> {
-            ErrorScreen {
-                println("TODO")
-            }
+            ErrorScreen()
         }
     }
 }

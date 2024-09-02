@@ -41,19 +41,17 @@ class GetCommentsWithUsersUseCase @Inject constructor(
     }
 
     private suspend fun associateCommentsWithUsers(
-        comments: List<Comment>,
-        users: List<User>,
-        postId: Int
+        comments: List<Comment>, users: List<User>, postId: Int
     ): List<CommentWithUser> {
         return withContext(defaultDispatcher) {
             val userMap = users.associateBy { it.id }
-            comments.filter { it.postId == postId }
-                .mapNotNull { comment ->
-                    val user = userMap[comment.userId]
-                    if (user != null) {
+            comments.asSequence().mapNotNull { comment ->
+                if (comment.postId == postId) {
+                    userMap[comment.userId]?.let { user ->
                         CommentWithUser(comment, user)
-                    } else null
-                }
+                    }
+                } else null
+            }.toList()
         }
     }
 }

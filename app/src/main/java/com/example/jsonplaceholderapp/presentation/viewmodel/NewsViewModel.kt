@@ -1,5 +1,6 @@
 package com.example.jsonplaceholderapp.presentation.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.jsonplaceholderapp.domain.usecases.ArticleWithAuthor
@@ -49,7 +50,8 @@ class NewsViewModel @Inject constructor(
             }
 
             is Result.Error -> {
-                NewsUiState.Error(result.error.message)
+                Log.e("NewsViewModel", result.error.message)
+                NewsUiState.Error
             }
         }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), NewsUiState.Loading)
@@ -62,5 +64,5 @@ class NewsViewModel @Inject constructor(
 sealed class NewsUiState {
     data object Loading : NewsUiState()
     data class ShowNewsList(val data: List<ArticleWithAuthor>) : NewsUiState()
-    data class Error(val message: String?) : NewsUiState()
+    data object Error : NewsUiState()
 }
