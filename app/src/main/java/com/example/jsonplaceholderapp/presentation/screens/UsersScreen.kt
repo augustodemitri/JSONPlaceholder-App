@@ -61,13 +61,7 @@ fun UsersScreen(
             }
 
             is UserUiState.Error -> {
-                val errorMsg = (userScreenState as UserUiState.Error).errorMsg
-                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text(text = errorMsg ?: "Unknown Error")
-                }
-//                ErrorScreen {
-//                    // TODO
-//                }
+                ErrorScreen()
             }
         }
     }

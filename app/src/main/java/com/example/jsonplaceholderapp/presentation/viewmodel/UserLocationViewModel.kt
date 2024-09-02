@@ -1,5 +1,6 @@
 package com.example.jsonplaceholderapp.presentation.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.jsonplaceholderapp.domain.model.User
@@ -24,7 +25,8 @@ class UserLocationViewModel @Inject constructor(
 
     fun loadUserLocation(userId: Int?) = viewModelScope.launch {
         if (userId == null) {
-            _userLocationUiState.value = UserLocationUiState.Error("NULL user id")
+            Log.e("UserLocationViewModel", "Null user id")
+            _userLocationUiState.value = UserLocationUiState.Error
         } else {
             when (val user = safeApiCall { userRepository.getUserDetails(userId) }) {
                 is Result.Success -> {
@@ -32,7 +34,8 @@ class UserLocationViewModel @Inject constructor(
                 }
 
                 is Result.Error -> {
-                    _userLocationUiState.value = UserLocationUiState.Error(user.error.message)
+                    Log.e("UserLocationViewModel", user.error.message)
+                    _userLocationUiState.value = UserLocationUiState.Error
                 }
             }
         }
@@ -42,5 +45,5 @@ class UserLocationViewModel @Inject constructor(
 sealed class UserLocationUiState {
     data object Loading : UserLocationUiState()
     data class ShowUserLocation(val user: User) : UserLocationUiState()
-    data class Error(val errorMessage: String?) : UserLocationUiState()
+    data object Error : UserLocationUiState()
 }
