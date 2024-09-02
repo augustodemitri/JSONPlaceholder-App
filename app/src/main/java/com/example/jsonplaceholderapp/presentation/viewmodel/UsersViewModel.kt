@@ -1,5 +1,6 @@
 package com.example.jsonplaceholderapp.presentation.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.jsonplaceholderapp.domain.model.User
@@ -23,7 +24,8 @@ class UsersViewModel @Inject constructor(
                 emit(UserUiState.ShowUsers(result.data))
             }
             is Result.Error -> {
-                emit(UserUiState.Error(result.error.message))
+                Log.e("UsersViewModel", result.error.message)
+                emit(UserUiState.Error)
             }
         }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), UserUiState.Loading)
@@ -33,5 +35,5 @@ class UsersViewModel @Inject constructor(
 sealed class UserUiState {
     data object Loading: UserUiState()
     data class ShowUsers(val userList: List<User>) : UserUiState()
-    data class Error(val errorMsg: String?) : UserUiState()
+    data object Error : UserUiState()
 }

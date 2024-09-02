@@ -116,13 +116,7 @@ fun MapScreen(
         }
 
         is UserLocationUiState.Error -> {
-            val errorMsg = (userLocationUiState as UserLocationUiState.Error).errorMessage
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text(text = errorMsg ?: "Unknown Error")
-            }
-//            ErrorScreen {
-//                // TODO
-//            }
+            ErrorScreen()
         }
     }
 }
