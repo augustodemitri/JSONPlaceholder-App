@@ -1,5 +1,6 @@
 package com.example.jsonplaceholderapp.presentation.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.jsonplaceholderapp.domain.model.CommentWithUser
@@ -31,6 +32,7 @@ class NewsDetailViewModel @Inject constructor(
     private val _newsId = MutableStateFlow<Int?>(null)
     private val _showBottomSheet = MutableStateFlow(false)
     val showBottomSheet: StateFlow<Boolean> = _showBottomSheet.asStateFlow()
+    private val _refreshCounter = MutableStateFlow(0)
 
     val newsDetailsState: StateFlow<NewsDetailsUiState> = _newsId
         .filterNotNull()
@@ -45,7 +47,7 @@ class NewsDetailViewModel @Inject constructor(
                     }
 
                     is NewsDetailsUiState.Error -> {
-                        NewsDetailsUiState.Error(newsDetails.message)
+                        NewsDetailsUiState.Error
                     }
 
                     else -> NewsDetailsUiState.Loading
@@ -61,7 +63,8 @@ class NewsDetailViewModel @Inject constructor(
             }
 
             is Result.Error -> {
-                emit(NewsDetailsUiState.Error(result.error.message))
+                Log.e("NewsDetailsViewModel", result.error.message)
+                emit(NewsDetailsUiState.Error)
             }
         }
     }
@@ -95,5 +98,5 @@ class NewsDetailViewModel @Inject constructor(
 sealed class NewsDetailsUiState {
     data object Loading : NewsDetailsUiState()
     data class ShowNewsDetail(val news: News, val comments: List<CommentWithUser>) : NewsDetailsUiState()
-    data class Error(val message: String?) : NewsDetailsUiState()
+    data object Error : NewsDetailsUiState()
 }

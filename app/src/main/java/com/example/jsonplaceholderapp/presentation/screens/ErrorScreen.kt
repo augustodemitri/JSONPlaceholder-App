@@ -14,11 +14,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -26,7 +24,7 @@ import androidx.compose.ui.res.stringResource
 import com.example.jsonplaceholderapp.R
 
 @Composable
-fun ErrorScreen(onContinueClick: () -> Unit) {
+fun ErrorScreen() {
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
@@ -36,7 +34,7 @@ fun ErrorScreen(onContinueClick: () -> Unit) {
                 .fillMaxSize()
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center // Center the content
+            verticalArrangement = Arrangement.Center
         ) {
             Image(
                 painter = painterResource(id = R.drawable.error_icon),
@@ -50,25 +48,13 @@ fun ErrorScreen(onContinueClick: () -> Unit) {
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold
             )
+            Spacer(modifier = Modifier.height(12.dp))
             Text(
-                text = stringResource(id = R.string.try_again),
+                text = stringResource(id = R.string.try_again_later),
                 color = Color.Black,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold
             )
-            Spacer(modifier = Modifier.height(48.dp)) // Add more space between the text and the button
-            Button(
-                onClick = onContinueClick,
-                modifier = Modifier
-                    .fillMaxWidth(0.8f)
-                    .height(50.dp)
-            ) {
-                Text(
-                    text = "Continue",
-                    color = Color.Black,
-                    fontSize = 16.sp
-                )
-            }
         }
     }
 }
@@ -76,5 +62,5 @@ fun ErrorScreen(onContinueClick: () -> Unit) {
 @Preview(showBackground = true)
 @Composable
 fun ErrorScreenPreview() {
-    ErrorScreen(onContinueClick = {})
+    ErrorScreen()
 }

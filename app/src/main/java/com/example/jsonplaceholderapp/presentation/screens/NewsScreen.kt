@@ -74,9 +74,12 @@ fun NewsScreen(
                 .padding(start = 4.dp, top = 4.dp)
         )
 
-        SearchBarComponent(query, onQueryChanged = { typedQuery ->
-            newsViewModel.updateQuery(typedQuery)
-        })
+        SearchBarComponent(
+            query = query,
+            onQueryChanged = { typedQuery ->
+                newsViewModel.updateQuery(typedQuery)
+            }
+        )
 
         when (newsListState) {
             is NewsUiState.Loading -> {
@@ -91,7 +94,7 @@ fun NewsScreen(
             }
 
             is NewsUiState.Error -> {
-                // TODO: Handle error state
+                ErrorScreen()
             }
         }
     }

@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -10,6 +12,9 @@ android {
     namespace = "com.example.jsonplaceholderapp"
     compileSdk = 34
 
+    val properties = Properties()
+    properties.load(project.rootProject.file("local.properties").inputStream())
+
     defaultConfig {
         applicationId = "com.example.jsonplaceholderapp"
         minSdk = 28
@@ -17,7 +22,7 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        buildConfigField("String", "BASE_URL", "\"https://jsonplaceholder.org/\"")
+        resValue("string", "BASE_URL", properties.getProperty("BASE_URL", ""))
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
