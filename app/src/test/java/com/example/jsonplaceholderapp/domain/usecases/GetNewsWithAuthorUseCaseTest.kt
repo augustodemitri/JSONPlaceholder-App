@@ -1,22 +1,20 @@
 package com.example.jsonplaceholderapp.domain.usecases
 
-import com.example.jsonplaceholderapp.domain.model.CommentWithUser
-import com.example.jsonplaceholderapp.domain.repository.CommentsRepository
+import com.example.jsonplaceholderapp.domain.repository.NewsRepository
 import com.example.jsonplaceholderapp.domain.repository.UserRepository
 import com.example.jsonplaceholderapp.util.Result
-import com.example.jsonplaceholderapp.utils.TestUtils.comment1
 import com.example.jsonplaceholderapp.utils.TestUtils.defaultDispatcher
 import com.example.jsonplaceholderapp.utils.TestUtils.ioDispatcher
+import com.example.jsonplaceholderapp.utils.TestUtils.news1
 import com.example.jsonplaceholderapp.utils.TestUtils.testDispatcher
 import com.example.jsonplaceholderapp.utils.TestUtils.user1
-import com.example.jsonplaceholderapp.utils.TestUtils.user2
-import io.mockk.mockk
-import io.mockk.coEvery
 import io.mockk.clearAllMocks
+import io.mockk.coEvery
+import io.mockk.mockk
 import junit.framework.Assert.assertEquals
+import junit.framework.Assert.assertNull
 import junit.framework.Assert.assertTrue
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
@@ -24,90 +22,86 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 
-class GetCommentsWithUsersUseCaseTest {
+class GetNewsWithAuthorUseCaseTest {
 
-    private lateinit var commentsRepository: CommentsRepository
     private lateinit var userRepository: UserRepository
-    private lateinit var getCommentsWithUsersUseCase: GetCommentsWithUsersUseCase
+    private lateinit var newsRepository: NewsRepository
+    private lateinit var getNewsWithAuthorUseCase: GetNewsWithAuthorUseCase
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Before
     fun setup() {
         Dispatchers.setMain(testDispatcher)
-        commentsRepository = mockk()
         userRepository = mockk()
-        getCommentsWithUsersUseCase = GetCommentsWithUsersUseCase(
+        newsRepository = mockk()
+        getNewsWithAuthorUseCase = GetNewsWithAuthorUseCase(
             userRepository,
-            commentsRepository,
+            newsRepository,
             ioDispatcher,
             defaultDispatcher
         )
         clearAllMocks()
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @After
     fun tearDown() {
         Dispatchers.resetMain() // Reset Main dispatcher
     }
 
     @Test
-    fun `invoke returns success when comments and users are fetched successfully`() = runTest {
+    fun `invoke returns success when news and users are fetched successfully`() = runTest {
         // Given
-        val mockComments = listOf(comment1)
+        val mockNews = listOf(news1)
         val mockUsers = listOf(user1)
-        coEvery { commentsRepository.getComments() } returns mockComments
+        coEvery { newsRepository.getNewsList() } returns mockNews
         coEvery { userRepository.getUserList() } returns mockUsers
 
         // When
-        val result = getCommentsWithUsersUseCase(1)
+        val result = getNewsWithAuthorUseCase()
 
         // Then
         assertTrue(result is Result.Success)
-
-        val expectedCommentWithUser = CommentWithUser(
-            comment = mockComments.first(),
-            user = mockUsers.first()
+        val expectedArticleWithAuthor = ArticleWithAuthor(
+            news = mockNews.first(),
+            author = mockUsers.first()
         )
-        assertEquals(listOf(expectedCommentWithUser), (result as Result.Success).data)
+        assertEquals(listOf(expectedArticleWithAuthor), (result as Result.Success).data)
     }
 
     @Test
-    fun `invoke returns error when fetching comments fails`() = runTest {
+    fun `invoke returns error when fetching news fails`() = runTest {
         // Given
-        coEvery { commentsRepository.getComments() } throws Exception("Network error")
+        coEvery { newsRepository.getNewsList() } throws Exception("Network error fetching news")
 
         // When
-        val result = getCommentsWithUsersUseCase(1)
+        val result = getNewsWithAuthorUseCase()
 
         // Then
         assertTrue(result is Result.Error)
-        assertEquals("Network error", (result as Result.Error).error.message)
+        assertEquals("Network error fetching news", (result as Result.Error).error.message)
     }
 
     @Test
     fun `invoke returns error when fetching users fails`() = runTest {
         // Given
-        coEvery { commentsRepository.getComments() } returns listOf(comment1)
+        coEvery { newsRepository.getNewsList() } returns listOf(news1)
         coEvery { userRepository.getUserList() } throws Exception("Network error fetching users")
 
         // When
-        val result = getCommentsWithUsersUseCase(1)
+        val result = getNewsWithAuthorUseCase()
 
         // Then
         assertTrue(result is Result.Error)
         assertEquals("Network error fetching users", (result as Result.Error).error.message)
     }
 
-
     @Test
-    fun `invoke returns success with empty list when no comments are found`() = runTest {
+    fun `invoke returns success with empty list when no news are found`() = runTest {
         // Given
-        coEvery { commentsRepository.getComments() } returns emptyList()
+        coEvery { newsRepository.getNewsList() } returns emptyList()
         coEvery { userRepository.getUserList() } returns listOf(user1)
 
         // When
-        val result = getCommentsWithUsersUseCase(1)
+        val result = getNewsWithAuthorUseCase()
 
         // Then
         assertTrue(result is Result.Success)
@@ -117,32 +111,32 @@ class GetCommentsWithUsersUseCaseTest {
     @Test
     fun `invoke returns success with empty list when no users are found`() = runTest {
         // Given
-        coEvery { commentsRepository.getComments() } returns listOf(comment1)
+        coEvery { newsRepository.getNewsList() } returns listOf(news1)
         coEvery { userRepository.getUserList() } returns emptyList()
 
         // When
-        val result = getCommentsWithUsersUseCase(1)
+        val result = getNewsWithAuthorUseCase()
 
         // Then
         assertTrue(result is Result.Success)
-        assertTrue((result as Result.Success).data.isEmpty())
+        assertTrue((result as Result.Success).data.isNotEmpty())
+        assertNull(result.data.first().author) // No users
     }
 
     @Test
-    fun `invoke returns empty list when no matching users are found`() = runTest {
+    fun `invoke processes news in chunks when news list is large`() = runTest {
         // Given
-        val mockComments = listOf(comment1)
-        val mockUsers = listOf(user2)
+        val mockNews = List(100) { news1.copy(id = it) } // 100 articles
+        val mockUsers = listOf(user1)
 
-        coEvery { commentsRepository.getComments() } returns mockComments
+        coEvery { newsRepository.getNewsList() } returns mockNews
         coEvery { userRepository.getUserList() } returns mockUsers
 
         // When
-        val result = getCommentsWithUsersUseCase(1)
+        val result = getNewsWithAuthorUseCase()
 
         // Then
         assertTrue(result is Result.Success)
-        assertTrue((result as Result.Success).data.isEmpty()) // No user matches the comment's userId
+        assertEquals(100, (result as Result.Success).data.size)
     }
-
 }
