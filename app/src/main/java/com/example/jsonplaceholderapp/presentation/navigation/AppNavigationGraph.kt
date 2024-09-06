@@ -2,6 +2,8 @@ package com.example.jsonplaceholderapp.presentation.navigation
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -30,15 +32,20 @@ fun AppNavigationGraph(
             arguments = listOf(navArgument("id") { type = NavType.IntType })
         ) { backStackEntry ->
             val id = backStackEntry.arguments?.getInt("id")
-            NewsDetailsScreen(newsId = id, popBack = {
+            NewsDetailsScreen(
+                newsId = id,
+                popBack = {
                 navController.popBackStack()
             })
         }
 
         composable("users") {
-            UsersScreen(paddingValues) { id ->
-                navController.navigate("map_screen/$id")
-            }
+            UsersScreen(
+                paddingValues,
+                onUserLocationClick = { id ->
+                    navController.navigate("map_screen/$id")
+                }
+            )
         }
 
         composable(
@@ -49,7 +56,7 @@ fun AppNavigationGraph(
         ) { backStackEntry ->
             val id = backStackEntry.arguments?.getInt("id")
             MapScreen(
-                id,
+                userId = id,
                 onBack = {
                     navController.popBackStack()
                     setBottomNavVisibility(true)

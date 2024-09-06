@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Place
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -36,14 +35,12 @@ import com.example.jsonplaceholderapp.presentation.components.UserAvatarComponen
 import com.example.jsonplaceholderapp.presentation.viewmodel.UserLocationUiState
 import com.example.jsonplaceholderapp.presentation.viewmodel.UserLocationViewModel
 import com.example.jsonplaceholderapp.domain.model.User
-import com.google.android.gms.maps.model.CameraPosition
-import com.google.android.gms.maps.model.LatLng
+import com.example.jsonplaceholderapp.presentation.components.CircularProgressComponent
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.MapProperties
 import com.google.maps.android.compose.MapType
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
-import com.google.maps.android.compose.rememberCameraPositionState
 import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -55,36 +52,25 @@ fun MapScreen(
     userLocationViewModel: UserLocationViewModel = hiltViewModel()
 ) {
     val userLocationUiState by userLocationViewModel.userLocationUiState.collectAsState()
+    val cameraPositionState by userLocationViewModel.cameraPositionState.collectAsState()
 
     LaunchedEffect(userId) {
-        userLocationViewModel.loadUserLocation(userId)
-        delay(timeMillis =  250)
+        userLocationViewModel.setUserId(userId)
         setBottomNavVisibility(false)
     }
 
     when (userLocationUiState) {
         is UserLocationUiState.Loading -> {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator()
-            }
+            CircularProgressComponent(modifier = Modifier.size(50.dp))
         }
 
         is UserLocationUiState.ShowUserLocation -> {
-            val user = (userLocationUiState as UserLocationUiState.ShowUserLocation).user
-            val userLocation =
-                LatLng(user.address.geo.lat.toDouble(), user.address.geo.lng.toDouble())
-            val cameraPositionState = rememberCameraPositionState {
-                position = CameraPosition.fromLatLngZoom(userLocation, 10f)
-            }
+            val state = (userLocationUiState as UserLocationUiState.ShowUserLocation)
 
             Scaffold(
                 topBar = {
                     TopAppBar(
-                        title = {
-                            Text(
-                                text = "User Location"
-                            )
-                        },
+                        title = { Text(text = "User Location") },
                         navigationIcon = {
                             IconButton(onClick = onBack) {
                                 Icon(
@@ -92,11 +78,11 @@ fun MapScreen(
                                     contentDescription = "Back"
                                 )
                             }
-                        },
+                        }
                     )
                 },
                 bottomBar = {
-                    UserInfoSection(user)
+                    UserInfoSection(state.user)
                 },
                 content = { innerPadding ->
                     Box(modifier = Modifier.padding(innerPadding)) {
@@ -106,8 +92,8 @@ fun MapScreen(
                             properties = MapProperties(mapType = MapType.NORMAL)
                         ) {
                             Marker(
-                                state = MarkerState(position = userLocation),
-                                title = "${user.firstName} ${user.lastName}"
+                                state = MarkerState(position = state.userLocation),
+                                title = "${state.user.firstName} ${state.user.lastName}"
                             )
                         }
                     }
