@@ -32,7 +32,6 @@ class NewsDetailViewModel @Inject constructor(
     private val _newsId = MutableStateFlow<Int?>(null)
     private val _showBottomSheet = MutableStateFlow(false)
     val showBottomSheet: StateFlow<Boolean> = _showBottomSheet.asStateFlow()
-    private val _refreshCounter = MutableStateFlow(0)
 
     val newsDetailsState: StateFlow<NewsDetailsUiState> = _newsId
         .filterNotNull()

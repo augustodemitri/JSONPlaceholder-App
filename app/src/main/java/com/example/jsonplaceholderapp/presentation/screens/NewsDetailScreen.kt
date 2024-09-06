@@ -3,6 +3,7 @@ package com.example.jsonplaceholderapp.presentation.screens
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -64,7 +65,6 @@ fun NewsDetailsScreen(
     val showBottomSheet by newsDetailViewModel.showBottomSheet.collectAsState()
     val sheetState = rememberModalBottomSheetState()
 
-    // Check if the ID is not null and fetch data
     LaunchedEffect(newsId) {
         newsId?.let { newsDetailViewModel.setNewsId(it) }
     }
@@ -79,20 +79,24 @@ fun NewsDetailsScreen(
 
     when (newsDetailsUiState) {
         is NewsDetailsUiState.Loading -> {
-            CircularProgressComponent()
+            CircularProgressComponent(
+                modifier = Modifier.size(50.dp)
+            )
         }
 
         is NewsDetailsUiState.ShowNewsDetail -> {
             val state = (newsDetailsUiState as NewsDetailsUiState.ShowNewsDetail)
             NewsDetailContent(
-                state.news,
-                state.comments,
-                popBack = popBack
-            ) {
-                if (state.comments.isNotEmpty()) {
-                    newsDetailViewModel.toggleBottomSheet()
+                newsDetail = state.news,
+                comments = state.comments,
+                popBack = popBack,
+                onCommentClick = {
+                    if (state.comments.isNotEmpty()) {
+                        newsDetailViewModel.toggleBottomSheet()
+                    }
                 }
-            }
+            )
+
             if (showBottomSheet) {
                 BottomSheet(
                     state,
@@ -163,7 +167,7 @@ fun NewsDetailContent(
         SubcomposeAsyncImage(
             model = newsDetail.image,
             contentDescription = null,
-            loading = { CircularProgressIndicator() },
+            loading = { CircularProgressComponent(modifier = Modifier.size(20.dp)) },
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .fillMaxWidth()
@@ -205,7 +209,7 @@ private fun CommentsRow(comments: List<CommentWithUser>, onCommentClick: () -> U
                 contentDescription = null
             )
         }
-        Text("${comments.count()}") // Post comments
+        Text("${comments.count()}")
         Spacer(modifier = Modifier.width(16.dp))
     }
 }
@@ -218,8 +222,6 @@ private fun SectionHeader(formattedDate: String, popBack: () -> Unit) {
             Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null)
         }
         Spacer(modifier = Modifier.width(8.dp))
-        // Title
-        //Text("Post Details", fontWeight = FontWeight.Bold, fontSize = 20.sp) // TODO: ADD STRING RESOURCE
         Spacer(modifier = Modifier.weight(1f))
         Text(formattedDate, fontSize = 14.sp)
     }
@@ -258,7 +260,10 @@ fun CommentCard(commentWithUser: CommentWithUser) {
         Column(modifier = Modifier.padding(16.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
 
-                UserAvatarComponent(initials = commentWithUser.user.initials, modifier = Modifier.size(26.dp))
+                UserAvatarComponent(
+                    initials = commentWithUser.user.initials,
+                    modifier = Modifier.size(26.dp)
+                )
 
                 Spacer(modifier = Modifier.width(8.dp))
 

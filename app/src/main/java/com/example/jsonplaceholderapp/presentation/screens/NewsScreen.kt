@@ -83,14 +83,16 @@ fun NewsScreen(
 
         when (newsListState) {
             is NewsUiState.Loading -> {
-                CircularProgressComponent()
+                CircularProgressComponent(modifier = Modifier.size(20.dp).align(Alignment.CenterHorizontally))
             }
 
             is NewsUiState.ShowNewsList -> {
                 val articleWithAuthors = (newsListState as NewsUiState.ShowNewsList).data
-                NewsList(articlesWithAuthors = articleWithAuthors, onPostClicked = { newsId ->
-                    onNavigateToNewsDetails(newsId)
-                })
+                NewsList(
+                    articlesWithAuthors = articleWithAuthors,
+                    onPostClicked = { newsId ->
+                        onNavigateToNewsDetails(newsId)
+                    })
             }
 
             is NewsUiState.Error -> {
