@@ -100,6 +100,8 @@ dependencies {
     implementation("com.google.maps.android:maps-ktx:3.2.1")
     // KTX for the Maps SDK for Android Utility Library
     implementation("com.google.maps.android:maps-utils-ktx:5.1.1")
+    // Timber for Logging errors
+    implementation ("com.jakewharton.timber:timber:5.0.1")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.2.1")

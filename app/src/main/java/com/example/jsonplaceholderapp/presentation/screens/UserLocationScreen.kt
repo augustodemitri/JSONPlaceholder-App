@@ -56,6 +56,7 @@ fun MapScreen(
 
     LaunchedEffect(userId) {
         userLocationViewModel.setUserId(userId)
+        delay(250)
         setBottomNavVisibility(false)
     }
 

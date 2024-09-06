@@ -1,6 +1,5 @@
 package com.example.jsonplaceholderapp.presentation.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.jsonplaceholderapp.domain.usecases.ArticleWithAuthor
@@ -16,11 +15,13 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.stateIn
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class NewsViewModel @Inject constructor(
-    private val getNewsWithAuthorUseCase: GetNewsWithAuthorUseCase
+    private val getNewsWithAuthorUseCase: GetNewsWithAuthorUseCase,
+    private val logger: Timber.Tree
 ) : ViewModel() {
 
     private val _query = MutableStateFlow("")
@@ -50,7 +51,7 @@ class NewsViewModel @Inject constructor(
             }
 
             is Result.Error -> {
-                Log.e("NewsViewModel", result.error.message)
+                logger.e(result.error.message)
                 NewsUiState.Error
             }
         }

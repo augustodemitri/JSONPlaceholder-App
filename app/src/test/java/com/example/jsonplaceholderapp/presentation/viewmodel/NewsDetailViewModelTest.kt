@@ -1,21 +1,19 @@
 package com.example.jsonplaceholderapp.presentation.viewmodel
 
-import android.util.Log
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.example.jsonplaceholderapp.domain.model.Comment
-import com.example.jsonplaceholderapp.domain.model.CommentWithUser
-import com.example.jsonplaceholderapp.domain.model.News
 import com.example.jsonplaceholderapp.domain.repository.NewsRepository
 import com.example.jsonplaceholderapp.domain.usecases.GetCommentsWithUsersUseCase
 import com.example.jsonplaceholderapp.util.Result
 import com.example.jsonplaceholderapp.util.ServiceError
 import com.example.jsonplaceholderapp.utils.TestUtils
 import com.example.jsonplaceholderapp.utils.TestUtils.news1
-import io.mockk.clearAllMocks
 import io.mockk.coEvery
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkStatic
+import io.mockk.runs
+import io.mockk.unmockkStatic
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
@@ -30,6 +28,7 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import timber.log.Timber
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class NewsDetailViewModelTest {
@@ -40,18 +39,22 @@ class NewsDetailViewModelTest {
     private lateinit var viewModel: NewsDetailViewModel
     private val newsRepository = mockk<NewsRepository>()
     private val getCommentsAndUsersUseCase = mockk<GetCommentsWithUsersUseCase>()
+    private val logger = mockk<Timber.Tree>()
 
     @Before
     fun setup() {
-        mockkStatic(Log::class)
+        mockkStatic(Timber::class)
+        // Mock Timber logging
+        every { logger.e(any<String>()) } just runs
         Dispatchers.setMain(TestUtils.testDispatcher)
-        viewModel = NewsDetailViewModel(newsRepository, getCommentsAndUsersUseCase)
+        viewModel = NewsDetailViewModel(newsRepository, getCommentsAndUsersUseCase, logger)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @After
     fun tearDown() {
         Dispatchers.resetMain()
+        unmockkStatic(Timber::class)
     }
 
     @Test
@@ -78,7 +81,6 @@ class NewsDetailViewModelTest {
         // Given
         coEvery { newsRepository.getNewsDetails(1) } throws Exception("Network error")
         coEvery { getCommentsAndUsersUseCase(1) } returns Result.Success(emptyList())
-        every { Log.e(any(), any()) } returns 0
 
         // When
         viewModel.setNewsId(1)

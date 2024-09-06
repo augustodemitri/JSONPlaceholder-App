@@ -3,9 +3,9 @@ package com.example.jsonplaceholderapp.presentation.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.jsonplaceholderapp.domain.model.CommentWithUser
 import com.example.jsonplaceholderapp.domain.model.News
 import com.example.jsonplaceholderapp.domain.repository.NewsRepository
+import com.example.jsonplaceholderapp.domain.usecases.CommentWithUser
 import com.example.jsonplaceholderapp.domain.usecases.GetCommentsWithUsersUseCase
 import com.example.jsonplaceholderapp.util.Result
 import com.example.jsonplaceholderapp.util.safeApiCall
@@ -21,12 +21,14 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class NewsDetailViewModel @Inject constructor(
     private val newsRepository: NewsRepository,
-    private val getCommentsAndUsersUseCase: GetCommentsWithUsersUseCase
+    private val getCommentsAndUsersUseCase: GetCommentsWithUsersUseCase,
+    private val logger: Timber.Tree
 ) : ViewModel() {
 
     private val _newsId = MutableStateFlow<Int?>(null)
@@ -62,7 +64,7 @@ class NewsDetailViewModel @Inject constructor(
             }
 
             is Result.Error -> {
-                Log.e("NewsDetailsViewModel", result.error.message)
+                logger.e(result.error.message)
                 emit(NewsDetailsUiState.Error)
             }
         }

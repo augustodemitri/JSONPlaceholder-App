@@ -3,7 +3,6 @@ package com.example.jsonplaceholderapp.domain.usecases
 import com.example.jsonplaceholderapp.di.DefaultDispatcher
 import com.example.jsonplaceholderapp.di.IoDispatcher
 import com.example.jsonplaceholderapp.domain.model.Comment
-import com.example.jsonplaceholderapp.domain.model.CommentWithUser
 import com.example.jsonplaceholderapp.domain.model.User
 import com.example.jsonplaceholderapp.domain.repository.CommentsRepository
 import com.example.jsonplaceholderapp.domain.repository.UserRepository
@@ -55,5 +54,10 @@ class GetCommentsWithUsersUseCase @Inject constructor(
         }
     }
 }
+
+data class CommentWithUser(
+    val comment: Comment,
+    val user: User
+)
 
 
