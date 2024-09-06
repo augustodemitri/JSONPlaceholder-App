@@ -3,7 +3,6 @@ package com.example.jsonplaceholderapp.presentation.screens
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,7 +20,6 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -51,8 +49,8 @@ import com.example.jsonplaceholderapp.presentation.components.CircularProgressCo
 import com.example.jsonplaceholderapp.presentation.components.UserAvatarComponent
 import com.example.jsonplaceholderapp.presentation.viewmodel.NewsDetailViewModel
 import com.example.jsonplaceholderapp.presentation.viewmodel.NewsDetailsUiState
-import com.example.jsonplaceholderapp.domain.model.CommentWithUser
 import com.example.jsonplaceholderapp.domain.model.News
+import com.example.jsonplaceholderapp.domain.usecases.CommentWithUser
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

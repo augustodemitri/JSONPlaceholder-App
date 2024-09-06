@@ -1,6 +1,5 @@
 package com.example.jsonplaceholderapp.domain.usecases
 
-import com.example.jsonplaceholderapp.domain.model.CommentWithUser
 import com.example.jsonplaceholderapp.domain.repository.CommentsRepository
 import com.example.jsonplaceholderapp.domain.repository.UserRepository
 import com.example.jsonplaceholderapp.util.Result

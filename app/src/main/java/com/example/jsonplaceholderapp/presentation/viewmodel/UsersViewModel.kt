@@ -1,6 +1,5 @@
 package com.example.jsonplaceholderapp.presentation.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.jsonplaceholderapp.domain.model.User
@@ -11,11 +10,13 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.stateIn
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class UsersViewModel @Inject constructor(
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val logger: Timber.Tree
 )  : ViewModel() {
 
     val userUiState = flow {
@@ -24,7 +25,7 @@ class UsersViewModel @Inject constructor(
                 emit(UserUiState.ShowUsers(result.data))
             }
             is Result.Error -> {
-                Log.e("UsersViewModel", result.error.message)
+                logger.e(result.error.message)
                 emit(UserUiState.Error)
             }
         }

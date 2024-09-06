@@ -27,11 +27,6 @@ data class Address(
 )
 
 data class Geo(
-    val lat: String,
-    val lng: String
-)
-
-data class CommentWithUser(
-    val comment: Comment,
-    val user: User
+    val lat: String?,
+    val lng: String?
 )
