@@ -9,6 +9,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.navigation.compose.rememberNavController
 import com.example.jsonplaceholderapp.presentation.navigation.AppNavigationGraph
+import com.example.jsonplaceholderapp.presentation.navigation.BottomNavigation
+import com.example.jsonplaceholderapp.presentation.navigation.Screen
 
 @Composable
 fun ScaffoldComponent() {
@@ -18,14 +20,14 @@ fun ScaffoldComponent() {
 
     navController.addOnDestinationChangedListener { _, destination, _ ->
         selectedItemIndex = when (destination.route) {
-            "news" -> 0
-            "users" -> 1
+            Screen.News.route -> 0
+            Screen.Users.route -> 1
             else -> selectedItemIndex
         }
     }
     Scaffold(
         bottomBar = {
-            BottomNavBarComponent(
+            BottomNavigation(
                 isBottomBarVisible = bottomNavigationVisibility,
                 selectedItemIndex = selectedItemIndex,
                 onNavigate = { route ->

@@ -1,4 +1,4 @@
-package com.example.jsonplaceholderapp.presentation.components
+package com.example.jsonplaceholderapp.presentation.navigation
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -17,7 +17,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun BottomNavBarComponent(
+fun BottomNavigation(
     isBottomBarVisible: Boolean,
     selectedItemIndex: Int,
     onNavigate: (route: String) -> Unit
@@ -30,9 +30,7 @@ fun BottomNavBarComponent(
             navItems.forEachIndexed { i, navigationItem ->
                 NavigationBarItem(
                     selected = selectedItemIndex == i,
-                    onClick = {
-                        onNavigate.invoke(navigationItem.route)
-                    },
+                    onClick = { onNavigate(navigationItem.screen) },
                     icon = {
                         Icon(
                             imageVector = if (selectedItemIndex == i) {
@@ -53,13 +51,13 @@ fun BottomNavBarComponent(
 val navItems = listOf(
     BottomNavigationItem(
         title = "News",
-        route = "news",
+        screen = Screen.News.route,
         selectedIcon = Icons.Default.Home,
         unselectedIcon = Icons.Outlined.Home
     ),
     BottomNavigationItem(
         title = "Users",
-        route = "users",
+        screen = Screen.Users.route,
         selectedIcon = Icons.Filled.Person,
         unselectedIcon = Icons.Outlined.Person
     )
@@ -67,7 +65,7 @@ val navItems = listOf(
 
 data class BottomNavigationItem(
     val title: String,
-    val route: String,
+    val screen: String,
     val selectedIcon: ImageVector,
     val unselectedIcon: ImageVector
 )
