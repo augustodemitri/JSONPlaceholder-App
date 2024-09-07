@@ -2,13 +2,10 @@ package com.example.jsonplaceholderapp.presentation.navigation
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.navArgument
+import androidx.navigation.toRoute
 import com.example.jsonplaceholderapp.presentation.screens.MapScreen
 import com.example.jsonplaceholderapp.presentation.screens.NewsDetailsScreen
 import com.example.jsonplaceholderapp.presentation.screens.NewsScreen
@@ -20,43 +17,39 @@ fun AppNavigationGraph(
     navController: NavHostController,
     setBottomNavVisibility: (isVisible: Boolean) -> Unit
 ) {
-    NavHost(navController = navController, startDestination = "news") {
-        composable("news") {
-            NewsScreen(paddingValues, onNavigateToNewsDetails = { id ->
-                navController.navigate("news_details/$id")
+    NavHost(navController = navController, startDestination = Screen.News.route) {
+        composable(Screen.News.route) {
+            NewsScreen(paddingValues, onNavigateToNewsDetails = { postId ->
+                navController.navigate(
+                    Screen.NewsDetails(id = postId)
+                )
             })
         }
 
-        composable(
-            route = "news_details/{id}",
-            arguments = listOf(navArgument("id") { type = NavType.IntType })
-        ) { backStackEntry ->
-            val id = backStackEntry.arguments?.getInt("id")
+        composable<Screen.NewsDetails> { backStackEntry ->
+            val args = backStackEntry.toRoute<Screen.NewsDetails>()
             NewsDetailsScreen(
-                newsId = id,
+                newsId = args.id,
                 popBack = {
                 navController.popBackStack()
             })
         }
 
-        composable("users") {
+        composable(Screen.Users.route) {
             UsersScreen(
                 paddingValues,
                 onUserLocationClick = { id ->
-                    navController.navigate("map_screen/$id")
+                    navController.navigate(
+                        Screen.UserLocation(userId = id)
+                    )
                 }
             )
         }
 
-        composable(
-            route = "map_screen/{id}",
-            arguments = listOf(
-                navArgument("id") { type = NavType.IntType }
-            )
-        ) { backStackEntry ->
-            val id = backStackEntry.arguments?.getInt("id")
+        composable<Screen.UserLocation> { backStackEntry ->
+            val args = backStackEntry.toRoute<Screen.UserLocation>()
             MapScreen(
-                userId = id,
+                userId = args.userId,
                 onBack = {
                     navController.popBackStack()
                     setBottomNavVisibility(true)
