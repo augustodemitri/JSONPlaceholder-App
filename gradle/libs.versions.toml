@@ -1,0 +1,77 @@
+[versions]
+coreKtxVersion = "1.13.1"
+lifecycleRuntimeKtxVersion = "2.8.4"
+activityComposeVersion = "1.9.1"
+composeBomVersion = "2023.08.00"
+material3Version = "1.2.1"
+retrofitVersion = "2.11.0"
+gsonConverterVersion = "2.11.0"
+mapsUtilsVersion = "3.8.2"
+mapsUtilsKtxVersion = "5.1.1"
+hiltAndroidVersion = "2.48"
+hiltNavigationComposeVersion = "1.2.0"
+navigationComposeVersion = "2.8.0-alpha08"
+coroutinesAndroidVersion = "1.8.1"
+coroutinesCoreVersion = "1.8.1"
+coilComposeVersion = "2.7.0"
+playServicesMapsVersion = "18.0.2"
+playServicesLocationVersion = "21.3.0"
+mapsComposeVersion = "2.8.0"
+mapsKtxVersion = "3.2.1"
+timberVersion = "5.0.1"
+serializationJsonVersion = "1.6.3"
+junitVersion = "4.13.2"
+androidxJunitVersion = "1.2.1"
+mockkVersion = "1.13.12"
+coroutinesTestVersion = "1.7.3"
+espressoCoreVersion = "3.6.1"
+coreTestingVersion = "2.2.0"
+
+#Plugings versions
+androidGradlePlugin = "8.2.2"
+kotlin = "1.9.0"
+secretsPlugin = "2.0.1"
+
+[libraries]
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtxVersion" }
+androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtxVersion" }
+androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityComposeVersion" }
+androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBomVersion" }
+androidx-ui = { group = "androidx.compose.ui", name = "ui" }
+androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
+androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+androidx-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3Version" }
+retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofitVersion" }
+retrofit-gson-converter = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "gsonConverterVersion" }
+maps-utils = { group = "com.google.maps.android", name = "android-maps-utils", version.ref = "mapsUtilsVersion" }
+maps-utils-ktx = { group = "com.google.maps.android", name = "maps-utils-ktx", version.ref = "mapsUtilsKtxVersion" }
+hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hiltAndroidVersion" }
+hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavigationComposeVersion" }
+hilt-android-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hiltAndroidVersion" }
+navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationComposeVersion" }
+kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutinesAndroidVersion" }
+kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutinesCoreVersion" }
+coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coilComposeVersion" }
+play-services-maps = { group = "com.google.android.gms", name = "play-services-maps", version.ref = "playServicesMapsVersion" }
+play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "playServicesLocationVersion" }
+maps-compose = { group = "com.google.maps.android", name = "maps-compose", version.ref = "mapsComposeVersion" }
+maps-ktx = { group = "com.google.maps.android", name = "maps-ktx", version.ref = "mapsKtxVersion" }
+timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timberVersion" }
+kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "serializationJsonVersion" }
+
+junit = { group = "junit", name = "junit", version.ref = "junitVersion" }
+androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidxJunitVersion" }
+mockk = { group = "io.mockk", name = "mockk", version.ref = "mockkVersion" }
+kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutinesTestVersion" }
+espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCoreVersion" }
+androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
+androidx-arch-core-testing = { group = "androidx.arch.core", name = "core-testing", version.ref = "coreTestingVersion" }
+androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
+androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hiltAndroidVersion" }
+secrets-gradle-plugin = { id = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", version.ref = "secretsPlugin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
