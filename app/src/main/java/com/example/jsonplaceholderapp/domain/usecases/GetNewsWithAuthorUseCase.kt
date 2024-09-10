@@ -8,6 +8,7 @@ import com.example.jsonplaceholderapp.domain.repository.NewsRepository
 import com.example.jsonplaceholderapp.domain.repository.UserRepository
 import com.example.jsonplaceholderapp.util.ServiceError
 import com.example.jsonplaceholderapp.util.Result
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -35,19 +36,25 @@ class GetNewsWithAuthorUseCase @Inject constructor(
         newsList: List<News>,
         userList: List<User>
     ): Result<List<ArticleWithAuthor>, ServiceError> = withContext(defaultDispatcher) {
-        val userMap = userList.associateBy { it.id }
-        val chunkSize = 20
+        try {
+            val userMap = userList.associateBy { it.id }
+            val chunkSize = 40
 
-        val result = newsList.chunked(chunkSize).map { chunk ->
-            async {
-                chunk.map { article ->
-                    val author = userMap[article.userId]
-                    ArticleWithAuthor(article, author)
+            val result = newsList.chunked(chunkSize).map { chunk ->
+                async {
+                    chunk.map { article ->
+                        val author = userMap[article.userId]
+                        ArticleWithAuthor(article, author)
+                    }
                 }
-            }
-        }.awaitAll().flatten()
+            }.awaitAll().flatten()
 
-        Result.Success(result)
+            Result.Success(result)
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            Result.Error(ServiceError(e.message ?: "An unknown error occurred"))
+        }
     }
 }
 
